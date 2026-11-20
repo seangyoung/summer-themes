@@ -5,8 +5,10 @@ A public collection of flexible, kid-focused themed-week plans for summer. Each 
 ## Published plans
 
 - [Dinosaur Week](dinosaur-week/)
+- [Space Week](space-week/)
 
 ## Site structure
 
 - `index.html`: public site home page
 - `dinosaur-week/`: the first full themed-week plan and its images
+- `space-week/`: the second full themed-week plan and its images
