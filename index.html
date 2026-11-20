@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Themed Summer Weeks</title>
+  <style>
+    :root {
+      --paper: #fbf4e2;
+      --ink: #1e3526;
+      --moss: #3e6544;
+      --sun: #d48732;
+      --cream: #fffdf7;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Avenir Next", "Trebuchet MS", sans-serif;
+      background:
+        radial-gradient(circle at 12% 6%, rgba(212, 135, 50, 0.23), transparent 26rem),
+        radial-gradient(circle at 88% 24%, rgba(62, 101, 68, 0.18), transparent 28rem),
+        var(--paper);
+    }
+
+    main { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 56px 0 80px; }
+    h1, h2 { font-family: "Palatino Linotype", Georgia, serif; line-height: 1.05; }
+    h1 { font-size: clamp(3rem, 7vw, 6rem); margin: 0 0 18px; letter-spacing: -0.045em; }
+    h2 { font-size: 2rem; margin: 0; }
+    p { line-height: 1.6; }
+    .intro { max-width: 740px; font-size: 1.2rem; }
+    .rule { width: 92px; height: 4px; background: var(--sun); margin: 28px 0 46px; border-radius: 99px; }
+    .card {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      overflow: hidden;
+      background: rgba(255, 253, 247, 0.86);
+      border: 1px solid rgba(30, 53, 38, 0.12);
+      border-radius: 28px;
+      box-shadow: 0 22px 50px rgba(30, 53, 38, 0.12);
+    }
+    .card img { width: 100%; height: 100%; min-height: 300px; object-fit: cover; display: block; }
+    .card-content { padding: 34px; }
+    .eyebrow { color: var(--moss); font-weight: 700; font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; }
+    .button {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 12px 18px;
+      color: var(--cream);
+      background: var(--moss);
+      border-radius: 999px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .button:hover { background: var(--sun); }
+    .note { max-width: 720px; margin-top: 52px; color: #4e5c4e; }
+    @media (max-width: 700px) {
+      main { width: min(100% - 24px, 1120px); padding-top: 34px; }
+      .card { grid-template-columns: 1fr; }
+      .card img { min-height: 220px; }
+      .card-content { padding: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Themed Summer Weeks</h1>
+    <p class="intro">A flexible family system for turning each week of summer into a memorable theme, with activities, crafts, books, movies, menus, outings, and room to make it your own.</p>
+    <div class="rule"></div>
+
+    <article class="card">
+      <img src="dinosaur-week/assets/sunday-fossil-hunt.png" alt="Children on a dinosaur fossil hunt">
+      <div class="card-content">
+        <p class="eyebrow">Available Week Plan</p>
+        <h2>Dinosaur Week</h2>
+        <p>Fossil digs, library finds, water play, a home paleo lab, a dinosaur museum outing, and a cozy Jurassic finale. Designed for a wide age range and a Texas summer.</p>
+        <a class="button" href="dinosaur-week/">Explore Dinosaur Week</a>
+      </div>
+    </article>
+
+    <p class="note">New themed weeks will be added as they are developed. Each plan is designed to be practical, flexible, and easy to adapt to your own family, budget, and location.</p>
+  </main>
+</body>
+</html>

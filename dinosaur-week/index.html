@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dinosaur Week</title>
+  <style>
+    :root {
+      --sand: #f4ebd4;
+      --stone: #d8c7a0;
+      --fern: #355b3b;
+      --fern-deep: #243d28;
+      --amber: #bf7b2a;
+      --bone: #fffaf0;
+      --ink: #1f241d;
+      --muted: #5e6658;
+      --card: rgba(255, 250, 240, 0.9);
+      --shadow: 0 20px 50px rgba(31, 36, 29, 0.12);
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Trebuchet MS", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(191, 123, 42, 0.18), transparent 30%),
+        linear-gradient(180deg, #f7efd8 0%, #f0e2bf 38%, #e7d6ab 100%);
+      line-height: 1.55;
+    }
+
+    a {
+      color: var(--fern-deep);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+    }
+
+    a:hover {
+      color: var(--amber);
+    }
+
+    .page {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(244, 235, 212, 0.86);
+      border-bottom: 1px solid rgba(36, 61, 40, 0.1);
+    }
+
+    .topbar-inner {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+      padding: 12px 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px 20px;
+    }
+
+    .brand {
+      font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--fern-deep);
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      font-size: 0.92rem;
+    }
+
+    .nav a {
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255, 250, 240, 0.68);
+      border: 1px solid rgba(36, 61, 40, 0.08);
+    }
+
+    .hero {
+      padding: 34px;
+      border-radius: 36px;
+      background:
+        linear-gradient(135deg, rgba(36, 61, 40, 0.9), rgba(71, 95, 46, 0.82)),
+        url("assets/sunday-fossil-hunt.png") center/cover;
+      color: var(--bone);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.2));
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+    }
+
+    h1, h2, h3 {
+      font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      line-height: 1.08;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 5vw, 4.8rem);
+      margin-bottom: 10px;
+    }
+
+    .lede {
+      font-size: 1.08rem;
+      max-width: 62ch;
+      margin-bottom: 20px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .hero-stat,
+    .mini-card,
+    .resource-group,
+    .theme-box,
+    .day-card {
+      border-radius: var(--radius-lg);
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-stat {
+      position: relative;
+      z-index: 1;
+      padding: 18px 20px;
+      color: var(--ink);
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-size: 1.2rem;
+      color: var(--fern-deep);
+      margin-bottom: 4px;
+    }
+
+    .section {
+      margin-top: 28px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .section-header p {
+      margin: 0;
+      max-width: 64ch;
+      color: var(--muted);
+    }
+
+    .cover-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .cover-grid figure,
+    .day-image {
+      margin: 0;
+      overflow: hidden;
+      border-radius: 22px;
+      background: #d1c098;
+    }
+
+    .cover-grid figure:first-child {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    .cover-grid img,
+    .day-image img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cover-grid figcaption {
+      padding: 10px 12px 12px;
+      font-size: 0.9rem;
+      background: rgba(255, 250, 240, 0.92);
+    }
+
+    .theme-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+    }
+
+    .theme-box {
+      padding: 22px 24px;
+    }
+
+    .theme-box h3 {
+      font-size: 1.35rem;
+      margin-bottom: 14px;
+    }
+
+    .theme-box ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .theme-box li + li {
+      margin-top: 8px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .mini-card {
+      padding: 18px 18px 16px;
+    }
+
+    .mini-card h3 {
+      font-size: 1.08rem;
+      margin-bottom: 8px;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .days {
+      display: grid;
+      gap: 22px;
+    }
+
+    .day-card {
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+    }
+
+    .day-image {
+      min-height: 100%;
+    }
+
+    .day-body {
+      padding: 24px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .day-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .day-heading h3 {
+      font-size: 1.9rem;
+      margin-bottom: 4px;
+    }
+
+    .day-heading p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .tag {
+      white-space: nowrap;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(53, 91, 59, 0.1);
+      color: var(--fern-deep);
+      font-size: 0.86rem;
+      font-weight: 600;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px 18px;
+    }
+
+    .detail h4 {
+      margin: 0 0 6px;
+      font-size: 0.92rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--fern-deep);
+    }
+
+    .detail p,
+    .detail ul {
+      margin: 0;
+      color: var(--ink);
+    }
+
+    .detail ul {
+      padding-left: 18px;
+    }
+
+    .detail li + li {
+      margin-top: 5px;
+    }
+
+    .resource-layout {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .resource-group {
+      padding: 22px 24px;
+    }
+
+    .resource-group h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+    }
+
+    .resource-group ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .resource-group li + li {
+      margin-top: 8px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      font-size: 0.94rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .cover-grid,
+      .mini-grid,
+      .theme-layout,
+      .resource-layout,
+      .details,
+      .day-card {
+        grid-template-columns: 1fr;
+      }
+
+      .cover-grid figure:first-child {
+        grid-column: auto;
+        grid-row: auto;
+      }
+
+      .day-image {
+        max-height: 340px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(calc(100% - 20px), var(--max));
+        padding-top: 18px;
+      }
+
+      .hero,
+      .theme-box,
+      .mini-card,
+      .resource-group,
+      .day-body {
+        padding: 20px;
+      }
+
+      .topbar-inner {
+        width: min(calc(100% - 20px), var(--max));
+      }
+
+      h1 {
+        font-size: 2.6rem;
+      }
+
+      .day-heading {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Summer Themes</div>
+      <nav class="nav">
+        <a href="#cover">Cover</a>
+        <a href="#overview">Overview</a>
+        <a href="#schedule">Week Plan</a>
+        <a href="#resources">Books, Shows, Movies</a>
+      </nav>
+    </div>
+  </div>
+
+  <main class="page">
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Dinosaur Week</h1>
+        <p class="lede">
+          A balanced week of fossils, footprints, prehistoric creatures, library finds, water play, museum time, and one big dino-filled finale.
+          This version starts on Sunday, keeps Monday as library day, and mixes cool indoor days with a few strong outdoor moments.
+        </p>
+      </div>
+      <div class="hero-grid">
+        <div class="hero-stat">
+          <strong>Budget Shape</strong>
+          Mostly low-cost at home, with one paid field trip and one optional extra.
+        </div>
+        <div class="hero-stat">
+          <strong>Outdoor Balance</strong>
+          Three outdoor days, three indoor/cool-down days, one flexible field trip day.
+        </div>
+        <div class="hero-stat">
+          <strong>Best Ages</strong>
+          Built for ages 6 to 16 with room for younger siblings to join the fun.
+        </div>
+        <div class="hero-stat">
+          <strong>Big Hooks</strong>
+          Fossil digs, splash-pad hatchery play, museum dinosaurs, movie night, and dino snacks.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cover">
+      <div class="section-header">
+        <div>
+          <h2>Cover Page</h2>
+          <p>Simple collage of the week at a glance.</p>
+        </div>
+      </div>
+      <div class="cover-grid">
+        <figure>
+          <img src="assets/sunday-fossil-hunt.png" alt="Backyard fossil dig for Dinosaur Week">
+          <figcaption>Sunday: fossil hunt kickoff</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/monday-library.png" alt="Library dinosaur books">
+          <figcaption>Monday: library expedition</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/tuesday-splash-pad.png" alt="Splash pad dinosaur play">
+          <figcaption>Tuesday: splash-pad hatchery</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/wednesday-paleo-lab.png" alt="Home paleontology lab">
+          <figcaption>Wednesday: paleo lab</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/thursday-rocky-beach.png" alt="Rocky beach prehistoric habitat play">
+          <figcaption>Thursday: prehistoric shoreline</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/friday-museum.png" alt="Dinosaur museum visit">
+          <figcaption>Friday: field trip day</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/saturday-movie-night.png" alt="Dinosaur movie night">
+          <figcaption>Saturday: jurassic celebration</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="overview">
+      <div class="section-header">
+        <div>
+          <h2>Theme Overview</h2>
+          <p>
+            Good background links for the week:
+            <a href="https://en.wikipedia.org/wiki/Dinosaur" target="_blank" rel="noreferrer">Dinosaurs</a>,
+            <a href="https://en.wikipedia.org/wiki/Paleontology" target="_blank" rel="noreferrer">Paleontology</a>,
+            <a href="https://en.wikipedia.org/wiki/Fossil" target="_blank" rel="noreferrer">Fossils</a>,
+            <a href="https://en.wikipedia.org/wiki/Tyrannosaurus" target="_blank" rel="noreferrer">Tyrannosaurus</a>,
+            <a href="https://en.wikipedia.org/wiki/Triceratops" target="_blank" rel="noreferrer">Triceratops</a>.
+          </p>
+        </div>
+      </div>
+
+      <div class="theme-layout">
+        <div class="theme-box">
+          <h3>How This Week Holds Together</h3>
+          <ul>
+            <li>Core ideas: dinosaurs, fossils, footprints, paleontologists, habitats, eggs, skeletons, and prehistoric landscapes.</li>
+            <li>Monday stays reserved for the library so the rest of the week can pull from a fresh book haul.</li>
+            <li>Outdoor pieces are used where they make the week feel bigger: digging, water play, and habitat building.</li>
+            <li>Indoor days help with Texas heat and give space for crafts, movies, and science-heavy activities without turning the week into school.</li>
+          </ul>
+        </div>
+        <div class="theme-box">
+          <h3>Planning Notes</h3>
+          <ul>
+            <li>Home-day supply estimates assume about 8 people and that you already have basics like tape, glue, markers, bowls, and baking sheets.</li>
+            <li>Pool, splash pad, parks, and the rocky beach area are treated as available free resources.</li>
+            <li>Fee-based outings include direct official links.</li>
+            <li>Field Trip Day lands on Friday here, but this format can shift to any non-Sunday day later.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mini-grid section">
+        <div class="mini-card">
+          <h3>Main Paid Outing</h3>
+          <p>
+            <a href="https://www.perotmuseum.org/" target="_blank" rel="noreferrer">Perot Museum of Nature and Science</a>.
+            Plan roughly <strong>$20 to $30 per person</strong> for timed museum admission depending on age and date.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>Optional Extra</h3>
+          <p>
+            <a href="https://tpwd.texas.gov/state-parks/dinosaur-valley" target="_blank" rel="noreferrer">Dinosaur Valley State Park</a>.
+            Official entrance fee: <strong>$8 ages 13+</strong>, <strong>free for ages 12 and under</strong>.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>Overall Budget Feel</h3>
+          <p>
+            Most home days land around <strong>$1 to $5 per person</strong>, with the main outing as the big-ticket item and Dinosaur Valley as a very strong optional add-on.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="schedule">
+      <div class="section-header">
+        <div>
+          <h2>Weekly Plan</h2>
+          <p>Sunday through Saturday, with named days and a better heat-friendly indoor/outdoor rhythm.</p>
+        </div>
+      </div>
+
+      <div class="days">
+        <article class="day-card">
+          <figure class="day-image">
+            <img src="assets/sunday-fossil-hunt.png" alt="Backyard fossil dig activity">
+          </figure>
+          <div class="day-body">
+            <div class="day-heading">
+              <div>
+                <h3>Sunday</h3>
+                <p><strong>Fossil Hunt Kickoff</strong> | Outdoor morning, indoor evening</p>
+              </div>
+              <div class="tag">$2 to $4 per person</div>
+            </div>
+            <div class="details">
+              <div class="detail">
+                <h4>Main Activity</h4>
+                <p>Set up a backyard dig site with buried toy dinosaurs, shells, bones, and “fossils” in sand or dirt. Give everyone brushes, spoons, and notebooks to record their finds.</p>
+              </div>
+              <div class="detail">
+                <h4>Craft</h4>
+                <p>Make salt-dough fossils and press in toy dinosaur feet, shells, leaves, or small plastic bones.</p>
+              </div>
+              <div class="detail">
+                <h4>Food</h4>
+                <p>Dirt pudding cups, fossil crackers, and easy grilled hot dogs or dinosaur nuggets for dinner.</p>
+              </div>
+              <div class="detail">
+                <h4>Entertainment Pick</h4>
+                <p>
+                  Start with
+                  <a href="https://www.imdb.com/title/tt0095489/" target="_blank" rel="noreferrer">The Land Before Time</a>
+                  or one episode of
+                  <a href="https://en.wikipedia.org/wiki/Prehistoric_Planet" target="_blank" rel="noreferrer">Prehistoric Planet</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="day-card">
+          <figure class="day-image">
+            <img src="assets/monday-library.png" alt="Dinosaur library visit">
+          </figure>
+          <div class="day-body">
+            <div class="day-heading">
+              <div>
+                <h3>Monday</h3>
+                <p><strong>Library Expedition</strong> | Indoor anchor day</p>
+              </div>
+              <div class="tag">$1 to $3 per person</div>
+            </div>
+            <div class="details">
+              <div class="detail">
+                <h4>Main Activity</h4>
+                <p>Visit the library and let everyone choose at least one dinosaur title, one picture-heavy nonfiction book, and one “just for fun” pick. Build a weekly stack for read-alouds and quiet time.</p>
+              </div>
+              <div class="detail">
+                <h4>Craft</h4>
+                <p>Make dinosaur bookmarks or a “field journal” with tea-stained pages, a hand-drawn title page, and space for facts and sketches all week.</p>
+              </div>
+              <div class="detail">
+                <h4>Food</h4>
+                <p>Dino egg muffins, apple slices, and trail mix in a tote bag for a simple library picnic before or after the visit.</p>
+              </div>
+              <div class="detail">
+                <h4>Reading Focus</h4>
+                <p>
+                  Great library targets:
+                  <a href="https://openlibrary.org/search?q=Encyclopedia+Prehistorica+Dinosaurs" target="_blank" rel="noreferrer">Encyclopedia Prehistorica Dinosaurs</a>,
+                  <a href="https://openlibrary.org/search?q=The+Dinosaurs+of+Waterhouse+Hawkins" target="_blank" rel="noreferrer">The Dinosaurs of Waterhouse Hawkins</a>,
+                  <a href="https://openlibrary.org/search?q=Ultimate+Dinopedia" target="_blank" rel="noreferrer">Ultimate Dinopedia</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="day-card">
+          <figure class="day-image">
+            <img src="assets/tuesday-splash-pad.png" alt="Dinosaur splash pad activity">
+          </figure>
+          <div class="day-body">
+            <div class="day-heading">
+              <div>
+                <h3>Tuesday</h3>
+                <p><strong>Splash-Pad Hatchery</strong> | Outdoor water day</p>
+              </div>
+              <div class="tag">$0 to $2 per person</div>
+            </div>
+            <div class="details">
+              <div class="detail">
+                <h4>Main Activity</h4>
+                <p>Bring plastic dinosaurs and frozen “dino eggs” to the splash pad or pool. Let the kids hatch them with water spray, soak, and gentle smashing in a bucket or shallow tray.</p>
+              </div>
+              <div class="detail">
+                <h4>Outdoor Add-On</h4>
+                <p>Play “predator and prey” tag at the park afterward if the heat allows, or shift to free swim and keep the day simple.</p>
+              </div>
+              <div class="detail">
+                <h4>Food</h4>
+                <p>Watermelon, popsicles, crackers, and sandwiches. Keep this one easy and cold.</p>
+              </div>
+              <div class="detail">
+                <h4>Show Pick</h4>
+                <p>
+                  Good lighter options:
+                  <a href="https://en.wikipedia.org/wiki/Dino_Dana" target="_blank" rel="noreferrer">Dino Dana</a>
+                  or
+                  <a href="https://en.wikipedia.org/wiki/Dino_Dan" target="_blank" rel="noreferrer">Dino Dan</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="day-card">
+          <figure class="day-image">
+            <img src="assets/wednesday-paleo-lab.png" alt="Home paleontology lab activity">
+          </figure>
+          <div class="day-body">
+            <div class="day-heading">
+              <div>
+                <h3>Wednesday</h3>
+                <p><strong>Paleo Lab</strong> | Indoor cool-down day</p>
+              </div>
+              <div class="tag">$1 to $3 per person</div>
+            </div>
+            <div class="details">
+              <div class="detail">
+                <h4>Main Activity</h4>
+                <p>Set up a home paleontology table with measuring tapes, magnifying glasses, chicken bones, reference books, and printable skeleton pages. Older kids can sketch and label specimens.</p>
+              </div>
+              <div class="detail">
+                <h4>Craft</h4>
+                <p>Make clay track casts or assemble paper and cardboard dinosaur skeletons to display on Saturday.</p>
+              </div>
+              <div class="detail">
+                <h4>Food</h4>
+                <p>Bone-shaped pretzels, “amber” gelatin cups, and a simple pasta lunch.</p>
+              </div>
+              <div class="detail">
+                <h4>Documentary Pick</h4>
+                <p>
+                  Older kids and teens:
+                  <a href="https://en.wikipedia.org/wiki/Walking_with_Dinosaurs" target="_blank" rel="noreferrer">Walking with Dinosaurs</a>
+                  or
+                  <a href="https://en.wikipedia.org/wiki/Planet_Dinosaur" target="_blank" rel="noreferrer">Planet Dinosaur</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="day-card">
+          <figure class="day-image">
+            <img src="assets/thursday-rocky-beach.png" alt="Rocky lakeside beach dinosaur habitat building">
+          </figure>
+          <div class="day-body">
+            <div class="day-heading">
+              <div>
+                <h3>Thursday</h3>
+                <p><strong>Prehistoric Shoreline</strong> | Outdoor adventure day</p>
+              </div>
+              <div class="tag">$1 to $3 per person</div>
+            </div>
+            <div class="details">
+              <div class="detail">
+                <h4>Main Activity</h4>
+                <p>Use the rocky beach area to build mini prehistoric habitats out of stones, driftwood, ferns, and shallow water channels. Add toy dinosaurs and invent which creatures lived where.</p>
+              </div>
+              <div class="detail">
+                <h4>Nature Tie-In</h4>
+                <p>Look for textures, footprints, shells, and rock layers that make the place feel like a “real” dig or ancient shoreline without overcomplicating it.</p>
+              </div>
+              <div class="detail">
+                <h4>Food</h4>
+                <p>Picnic lunch, fruit, and a cooler of drinks. This is a good day for chips, wraps, and cookies.</p>
+              </div>
+              <div class="detail">
+                <h4>Book Pairing</h4>
+                <p>
+                  Bring
+                  <a href="https://openlibrary.org/search?q=A+Dinosaur+Named+Sue" target="_blank" rel="noreferrer">A Dinosaur Named Sue</a>
+                  or
+                  <a href="https://openlibrary.org/search?q=DK+Eyewitness+Dinosaur" target="_blank" rel="noreferrer">DK Eyewitness Dinosaur</a>
+                  for shoreline reading breaks.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="day-card">
+          <figure class="day-image">
+            <img src="assets/friday-museum.png" alt="Dinosaur museum field trip">
+          </figure>
+          <div class="day-body">
+            <div class="day-heading">
+              <div>
+                <h3>Friday</h3>
+                <p><strong>Field Trip Day</strong> | Indoor museum day</p>
+              </div>
+              <div class="tag">$20 to $30 per person</div>
+            </div>
+            <div class="details">
+              <div class="detail">
+                <h4>Main Outing</h4>
+                <p>
+                  Go to the
+                  <a href="https://www.perotmuseum.org/" target="_blank" rel="noreferrer">Perot Museum of Nature and Science</a>
+                  for the dinosaur-heavy museum experience, cooler temperatures, and a true anchor outing for the week.
+                </p>
+              </div>
+              <div class="detail">
+                <h4>What To Do There</h4>
+                <ul>
+                  <li>Let everyone choose one favorite skeleton and one weirdest prehistoric creature.</li>
+                  <li>Take quick notes or sketches for Saturday’s home “museum.”</li>
+                  <li>Keep food costs down by planning a packed snack or meal outside the museum.</li>
+                </ul>
+              </div>
+              <div class="detail">
+                <h4>Optional Extra</h4>
+                <p>
+                  If you want the more literal dinosaur-track outing, use
+                  <a href="https://tpwd.texas.gov/state-parks/dinosaur-valley" target="_blank" rel="noreferrer">Dinosaur Valley State Park</a>
+                  as an add-on or substitute. Official fee: $8 for ages 13 and up, free for ages 12 and under.
+                </p>
+              </div>
+              <div class="detail">
+                <h4>Movie Pairing</h4>
+                <p>
+                  This is the best day for
+                  <a href="https://www.imdb.com/title/tt0107290/" target="_blank" rel="noreferrer">Jurassic Park</a>
+                  if the older kids want it, or
+                  <a href="https://www.imdb.com/title/tt0130623/" target="_blank" rel="noreferrer">Dinosaur</a>
+                  for a broader family pick.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="day-card">
+          <figure class="day-image">
+            <img src="assets/saturday-movie-night.png" alt="Dinosaur celebration and movie night">
+          </figure>
+          <div class="day-body">
+            <div class="day-heading">
+              <div>
+                <h3>Saturday</h3>
+                <p><strong>Jurassic Celebration</strong> | Indoor finale with flexible extras</p>
+              </div>
+              <div class="tag">$2 to $5 per person</div>
+            </div>
+            <div class="details">
+              <div class="detail">
+                <h4>Main Activity</h4>
+                <p>Turn the house into a family dino museum. Display fossils, tracks, field journals, skeleton builds, and habitat scenes from the week.</p>
+              </div>
+              <div class="detail">
+                <h4>Craft And Game</h4>
+                <p>Make final exhibit labels, award funny categories like “Best Bite” and “Top Paleontologist,” and finish with dinosaur trivia.</p>
+              </div>
+              <div class="detail">
+                <h4>Food</h4>
+                <p>Fossil cookies, popcorn, dinosaur cake, fruit, and make-your-own mini pizzas or a big easy snack board.</p>
+              </div>
+              <div class="detail">
+                <h4>Final Entertainment</h4>
+                <p>
+                  Finish with
+                  <a href="https://www.imdb.com/title/tt1979388/" target="_blank" rel="noreferrer">The Good Dinosaur</a>,
+                  <a href="https://www.imdb.com/title/tt1762399/" target="_blank" rel="noreferrer">Walking with Dinosaurs</a>,
+                  or a favorite returning episode from the week.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="resources">
+      <div class="section-header">
+        <div>
+          <h2>Books, Shows, And Movies</h2>
+          <p>More specific and more usable, with direct links for quick browsing and holds.</p>
+        </div>
+      </div>
+
+      <div class="resource-layout">
+        <div class="resource-group">
+          <h3>Books</h3>
+          <ul>
+            <li><a href="https://openlibrary.org/search?q=Encyclopedia+Prehistorica+Dinosaurs" target="_blank" rel="noreferrer">Encyclopedia Prehistorica Dinosaurs</a> by Robert Sabuda and Matthew Reinhart</li>
+            <li><a href="https://openlibrary.org/search?q=The+Dinosaurs+of+Waterhouse+Hawkins" target="_blank" rel="noreferrer">The Dinosaurs of Waterhouse Hawkins</a> by Barbara Kerley</li>
+            <li><a href="https://openlibrary.org/search?q=Dinosaurs+Before+Dark" target="_blank" rel="noreferrer">Dinosaurs Before Dark</a> by Mary Pope Osborne</li>
+            <li><a href="https://openlibrary.org/search?q=A+Dinosaur+Named+Sue" target="_blank" rel="noreferrer">A Dinosaur Named Sue</a> by Fay Robinson</li>
+            <li><a href="https://openlibrary.org/search?q=National+Geographic+Little+Kids+First+Big+Book+of+Dinosaurs" target="_blank" rel="noreferrer">National Geographic Little Kids First Big Book of Dinosaurs</a> by Catherine D. Hughes</li>
+            <li><a href="https://openlibrary.org/search?q=Ultimate+Dinopedia" target="_blank" rel="noreferrer">Ultimate Dinopedia</a> by Don Lessem</li>
+            <li><a href="https://openlibrary.org/search?q=DK+Eyewitness+Dinosaur" target="_blank" rel="noreferrer">DK Eyewitness Dinosaur</a></li>
+            <li><a href="https://openlibrary.org/search?q=Fossil+by+Fossil" target="_blank" rel="noreferrer">Fossil by Fossil</a> by Sara Levine</li>
+            <li><a href="https://openlibrary.org/search?q=Bone+Wars+Kathleen+V.+Kudlinski" target="_blank" rel="noreferrer">Bone Wars</a> by Kathleen V. Kudlinski</li>
+            <li><a href="https://openlibrary.org/search?q=The+Rise+and+Fall+of+the+Dinosaurs" target="_blank" rel="noreferrer">The Rise and Fall of the Dinosaurs</a> by Steve Brusatte</li>
+          </ul>
+        </div>
+
+        <div class="resource-group">
+          <h3>Movies And Shows</h3>
+          <ul>
+            <li><a href="https://www.imdb.com/title/tt0095489/" target="_blank" rel="noreferrer">The Land Before Time</a></li>
+            <li><a href="https://www.imdb.com/title/tt0130623/" target="_blank" rel="noreferrer">Dinosaur</a></li>
+            <li><a href="https://www.imdb.com/title/tt1979388/" target="_blank" rel="noreferrer">The Good Dinosaur</a></li>
+            <li><a href="https://www.imdb.com/title/tt0107290/" target="_blank" rel="noreferrer">Jurassic Park</a></li>
+            <li><a href="https://www.imdb.com/title/tt1762399/" target="_blank" rel="noreferrer">Walking with Dinosaurs</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Prehistoric_Planet" target="_blank" rel="noreferrer">Prehistoric Planet</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Walking_with_Dinosaurs" target="_blank" rel="noreferrer">Walking with Dinosaurs</a> documentary series</li>
+            <li><a href="https://en.wikipedia.org/wiki/Planet_Dinosaur" target="_blank" rel="noreferrer">Planet Dinosaur</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Dino_Dana" target="_blank" rel="noreferrer">Dino Dana</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Dino_Dan" target="_blank" rel="noreferrer">Dino Dan</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="footer-note">
+        Pricing references used for this page were checked on June 10, 2026. Perot Museum pricing can vary by age and date, so the estimate here is intentionally a planning range. Dinosaur Valley State Park fees come from the official Texas Parks and Wildlife park page.
+      </p>
+    </section>
+  </main>
+</body>
+</html>
